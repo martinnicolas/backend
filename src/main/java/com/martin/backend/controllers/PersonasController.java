@@ -28,6 +28,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.glassfish.jersey.server.mvc.Viewable;
 import org.javalite.activejdbc.Base;
+import org.javalite.activejdbc.LazyList;
 
 /**
  *
@@ -45,51 +46,28 @@ public class PersonasController {
 
     @GET
     @Path("/index")
-    @Produces(MediaType.TEXT_HTML)
-    public Response index(){
+    @Produces(MediaType.APPLICATION_JSON)
+    public String index(){
         //Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/alq", "root", "chacho77");
         Base.open("org.postgresql.Driver", "jdbc:postgresql://localhost/base", "postgres", "chacho77");
-        List<Personas> personas = Personas.findAll();
-        Map<String, Object> map = new HashMap<>();
-        map.put("personas",personas);                
-        return Response.ok(new Viewable("/views/personas/index.jsp",map)).build();
+        LazyList<Personas> personas = Personas.findAll();
+        return personas.toJson(true);
     }
     
     @GET
     @Path("/show/{id}")
-    @Produces(MediaType.TEXT_HTML)
-    public Response show(@PathParam("id") Integer id){
+    @Produces(MediaType.APPLICATION_JSON)
+    public String show(@PathParam("id") Integer id){
         //Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/alq", "root", "chacho77");
         Base.open("org.postgresql.Driver", "jdbc:postgresql://localhost/base", "postgres", "chacho77");
         Personas persona = Personas.findFirst("id = ?", id);        
-        Map<String, Object> map = new HashMap<>();
-        map.put("persona",persona);                
-        return Response.ok(new Viewable("/views/personas/show.jsp", map)).build();
-    }
-    
-    @GET
-    @Path("/new")
-    @Produces(MediaType.TEXT_HTML)
-    public Response add(){
-        return Response.ok(new Viewable("/views/personas/add.jsp")).build();
-    }
-    
-    @GET
-    @Path("/edit/{id}")
-    @Produces(MediaType.TEXT_HTML)
-    public Response edit(@PathParam("id") Integer id){
-        //Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/alq", "root", "chacho77");
-        Base.open("org.postgresql.Driver", "jdbc:postgresql://localhost/base", "postgres", "chacho77");
-        Personas persona = Personas.findFirst("id = ?", id);        
-        Map<String, Object> map = new HashMap<>();
-        map.put("persona",persona);
-        return Response.ok(new Viewable("/views/personas/edit.jsp", map)).build();
+        return persona.toJson(true);
     }
     
     @POST
     @Path("/update/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("id") Integer id,
+    public String update(@PathParam("id") Integer id,
             @FormParam("dni") Integer dni, 
             @FormParam("apellido") String apellido,
             @FormParam("nombre") String nombre){        
@@ -100,24 +78,24 @@ public class PersonasController {
         persona.setString("apellido", apellido);
         persona.setString("nombre", nombre);
         persona.saveIt();
-        return URLHelper.redirect("personas/show/"+id.toString());
+        return persona.toJson(true);
     }
     
     @GET
     @Path("/destroy/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response destroy(@PathParam("id") Integer id){
+    public String destroy(@PathParam("id") Integer id){
         //Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/alq", "root", "chacho77");
         Base.open("org.postgresql.Driver", "jdbc:postgresql://localhost/base", "postgres", "chacho77");
         Personas persona = Personas.findFirst("id = ?", id);        
         persona.delete();        
-        return URLHelper.redirect("personas/index");
+        return persona.getId().toString();
     }
     
     @POST
     @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response create(
+    public String create(
             @FormParam("dni") Integer dni, 
             @FormParam("apellido") String apellido,
             @FormParam("nombre") String nombre){
@@ -128,7 +106,7 @@ public class PersonasController {
         persona.setString("apellido", apellido);
         persona.setString("nombre", nombre);
         persona.saveIt();
-        return URLHelper.redirect("personas/index");
+        return persona.toJson(true);
     }
     
 }

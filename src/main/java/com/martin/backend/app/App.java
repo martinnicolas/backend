@@ -5,7 +5,7 @@
  */
 package com.martin.backend.app;
 
-import com.martin.backend.controllers.IndexController;
+import com.martin.backend.controllers.PersonasController;
 import io.swagger.jaxrs.listing.ApiListingResource;
 import io.swagger.jaxrs.listing.SwaggerSerializers;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -21,7 +21,7 @@ public class App extends ResourceConfig{
 
     public App(){
         //Resources
-        packages(IndexController.class.getPackage().getName());        
+        packages(PersonasController.class.getPackage().getName());        
         //MVC
         register(JspMvcFeature.class);
         //Bootstrap y demás contenido estatico
