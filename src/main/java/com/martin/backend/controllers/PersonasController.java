@@ -5,14 +5,9 @@
  */
 package com.martin.backend.controllers;
 
-import com.martin.backend.db.DBFilter;
-import com.martin.backend.helpers.URLHelper;
+import com.martin.backend.db.DB;
 import com.martin.backend.models.Personas;
 import io.swagger.annotations.Api;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DELETE;
@@ -25,26 +20,20 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import org.glassfish.jersey.server.mvc.Viewable;
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.LazyList;
 
 /**
- *
+ * Resource class para obtener servicios relacionados con los datos de las
+ * Personas
+ * 
  * @author martin
  */
 @Api("PersonasController")
 @Path("personas")
 public class PersonasController {
     
-    @Context
-    private HttpServletRequest request;
-    
-    @Context
-    private HttpServletResponse response;
-
-    @GET
+    @GET    
     @Path("/index")
     @Produces(MediaType.APPLICATION_JSON)
     public String index(){
