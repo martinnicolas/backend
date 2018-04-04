@@ -34,7 +34,6 @@ import org.javalite.activejdbc.LazyList;
 public class PersonasController {
     
     @GET    
-    @Path("/index")
     @Produces(MediaType.APPLICATION_JSON)
     public String index(){
         //Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/alq", "root", "chacho77");
@@ -44,7 +43,7 @@ public class PersonasController {
     }
     
     @GET
-    @Path("/show/{id}")
+    @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String show(@PathParam("id") Integer id){
         //Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/alq", "root", "chacho77");
@@ -53,8 +52,7 @@ public class PersonasController {
         return persona.toJson(true);
     }
     
-    @POST
-    @Path("/update/{id}")
+    @PUT
     @Produces(MediaType.APPLICATION_JSON)
     public String update(@PathParam("id") Integer id,
             @FormParam("dni") Integer dni, 
@@ -70,8 +68,7 @@ public class PersonasController {
         return persona.toJson(true);
     }
     
-    @GET
-    @Path("/destroy/{id}")
+    @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     public String destroy(@PathParam("id") Integer id){
         //Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/alq", "root", "chacho77");
@@ -82,7 +79,6 @@ public class PersonasController {
     }
     
     @POST
-    @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
     public String create(
             @FormParam("dni") Integer dni, 
