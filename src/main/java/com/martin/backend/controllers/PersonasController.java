@@ -53,6 +53,7 @@ public class PersonasController {
     }
     
     @PUT
+    @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String update(@PathParam("id") Integer id,
             @FormParam("dni") Integer dni, 
@@ -69,13 +70,14 @@ public class PersonasController {
     }
     
     @DELETE
+    @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String destroy(@PathParam("id") Integer id){
         //Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/alq", "root", "chacho77");
         Base.open("org.postgresql.Driver", "jdbc:postgresql://localhost/base", "postgres", "chacho77");
         Personas persona = Personas.findFirst("id = ?", id);        
         persona.delete();        
-        return persona.getId().toString();
+        return id.toString();
     }
     
     @POST
